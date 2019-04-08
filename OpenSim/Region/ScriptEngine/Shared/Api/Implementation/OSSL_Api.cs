@@ -145,6 +145,7 @@ namespace OpenSim.Region.ScriptEngine.Shared.Api
         protected IUrlModule m_UrlModule = null;
         protected ISoundModule m_SoundModule = null;
         internal IConfig m_osslconfig;
+        internal TimeZoneInfo PSTTimeZone = null;
 
         public void Initialize(
             IScriptEngine scriptEngine, SceneObjectPart host, TaskInventoryItem item)
@@ -201,7 +202,16 @@ namespace OpenSim.Region.ScriptEngine.Shared.Api
             default:
                 break;
             }
-         }
+
+            try
+            {
+                PSTTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time");
+            }
+            catch
+            {
+                PSTTimeZone = null;
+            }
+        }
 
         public override Object InitializeLifetimeService()
         {
