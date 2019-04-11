@@ -343,12 +343,14 @@ namespace OpenMetaverse
             {
                 // kick off an async read
                 m_udpSocket.BeginReceiveFrom(
+                    //wrappedBuffer.Instance.Data,
                     buf.Data,
                     0,
-                    buf.Data.Length,
+                    UDPPacketBuffer.BUFFER_SIZE,
                     SocketFlags.None,
                     ref buf.RemoteEndPoint,
                     AsyncEndReceive,
+                    //wrappedBuffer);
                     buf);
             }
             catch (SocketException e)
@@ -362,12 +364,14 @@ namespace OpenMetaverse
                         try
                         {
                             m_udpSocket.BeginReceiveFrom(
+                                //wrappedBuffer.Instance.Data,
                                 buf.Data,
                                 0,
-                                buf.Data.Length,
+                                UDPPacketBuffer.BUFFER_SIZE,
                                 SocketFlags.None,
                                 ref buf.RemoteEndPoint,
                                 AsyncEndReceive,
+                                //wrappedBuffer);
                                 buf);
                             salvaged = true;
                         }
@@ -377,6 +381,11 @@ namespace OpenMetaverse
 
                     m_log.Warn("[UDPBASE]: Salvaged the UDP listener on port " + m_udpPort);
                 }
+            }
+            catch (ObjectDisposedException e)
+            {
+                m_log.Error(
+                    string.Format("[UDPBASE]: Error processing UDP begin receive {0}.  Exception  ", UdpReceives), e);
             }
             catch (Exception e)
             {
@@ -434,6 +443,11 @@ namespace OpenMetaverse
                             UdpReceives, se.ErrorCode),
                         se);
                 }
+                catch (ObjectDisposedException e)
+                {
+                    m_log.Error(
+                        string.Format("[UDPBASE]: Error processing UDP end receive {0}.  Exception  ", UdpReceives), e);
+                }
                 catch (Exception e)
                 {
                     m_log.Error(
@@ -488,8 +502,6 @@ namespace OpenMetaverse
 */
         public void SyncSend(UDPPacketBuffer buf)
         {
-            if(buf.RemoteEndPoint == null)
-                return; // was already expired
             try
             {
                 m_udpSocket.SendTo(
@@ -503,7 +515,7 @@ namespace OpenMetaverse
             }
             catch (SocketException e)
             {
-                m_log.WarnFormat("[UDPBASE]: sync send SocketException {0} {1}", buf.RemoteEndPoint, e.Message);
+                m_log.Warn("[UDPBASE]: sync send SocketException {0} " + e.Message);
             }
             catch (ObjectDisposedException) { }
         }

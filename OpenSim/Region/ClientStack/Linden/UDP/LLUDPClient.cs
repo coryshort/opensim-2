@@ -650,12 +650,6 @@ namespace OpenSim.Region.ClientStack.LindenUDP
                     // leaving a dequeued packet still waiting to be sent out. Try to
                     // send it again
                     OutgoingPacket nextPacket = m_nextPackets[i];
-                    if(nextPacket.Buffer == null)
-                    {
-                        if (m_packetOutboxes[i].Count < 5)
-                            emptyCategories |= CategoryToFlag(i);
-                        continue;
-                    }
                     if (bucket.RemoveTokens(nextPacket.Buffer.DataLength))
                     {
                         // Send the packet
@@ -687,29 +681,21 @@ namespace OpenSim.Region.ClientStack.LindenUDP
                         {
                             // A packet was pulled off the queue. See if we have
                             // enough tokens in the bucket to send it out
-                            if(packet.Buffer == null)
+                            if (bucket.RemoveTokens(packet.Buffer.DataLength))
                             {
-                                // packet canceled elsewhere (by a ack for example)
+                                // Send the packet
+                                m_udpServer.SendPacketFinal(packet);
+                                packetSent = true;
+
                                 if (queue.Count < 5)
                                     emptyCategories |= CategoryToFlag(i);
                             }
                             else
                             {
-                                if (bucket.RemoveTokens(packet.Buffer.DataLength))
-                                {
-                                    // Send the packet
-                                    m_udpServer.SendPacketFinal(packet);
-                                    packetSent = true;
-
-                                    if (queue.Count < 5)
-                                        emptyCategories |= CategoryToFlag(i);
-                                }
-                                else
-                                {
-                                    // Save the dequeued packet for the next iteration
-                                    m_nextPackets[i] = packet;
-                                }
+                                // Save the dequeued packet for the next iteration
+                                m_nextPackets[i] = packet;
                             }
+
                         }
                         else
                         {
