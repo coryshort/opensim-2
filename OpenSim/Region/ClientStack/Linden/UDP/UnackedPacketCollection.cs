@@ -203,7 +203,6 @@ namespace OpenSim.Region.ClientStack.LindenUDP
                     if (ackedPacket != null)
                     {
                         m_packets.Remove(pendingAcknowledgement.SequenceNumber);
-                        ackedPacket.Client.FreeUDPBuffer(ackedPacket.Buffer);
 
                         // As with other network applications, assume that an acknowledged packet is an
                         // indication that the network can handle a little more load, speed up the transmission
@@ -242,7 +241,6 @@ namespace OpenSim.Region.ClientStack.LindenUDP
                     if (removedPacket != null)
                     {
                         m_packets.Remove(pendingRemove);
-                        removedPacket.Client.FreeUDPBuffer(removedPacket.Buffer);
 
                         // Update stats
                         Interlocked.Add(ref removedPacket.Client.UnackedBytes, -removedPacket.Buffer.DataLength);
