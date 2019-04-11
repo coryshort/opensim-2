@@ -687,7 +687,7 @@ namespace OpenSim.Region.ClientStack.LindenUDP
                     "clientstack",
                     Scene.Name,
                     StatType.Pull,
-                    stat => stat.Value = m_udpBuffersPoolPtr + 1,
+                    stat => stat.Value = m_udpBuffersPoolPtr,
                     StatVerbosity.Debug));
 
             LLUDPServerCommands commands = new LLUDPServerCommands(MainConsole.Instance, this);
@@ -1582,6 +1582,7 @@ namespace OpenSim.Region.ClientStack.LindenUDP
                         {
                             m_log.DebugFormat("[LLUDPSERVER]: Client created but no pending queue present");
                             return;
+
                         }
                         m_pendingCache.Remove(endPoint);
                     }
