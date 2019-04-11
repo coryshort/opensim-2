@@ -182,6 +182,22 @@ namespace OpenMetaverse
                 try { m_udpSocket.Close(); } catch { }
         }
 
+        public UDPPacketBuffer GetNewUDPBuffer()
+        {
+            lock (m_udpBuffersPoolLock)
+            {
+                if (m_udpBuffersPoolPtr >= 0)
+                {
+                    UDPPacketBuffer buf = m_udpBuffersPool[m_udpBuffersPoolPtr];
+                    m_udpBuffersPool[m_udpBuffersPoolPtr] = null;
+                    m_udpBuffersPoolPtr--;
+                    buf.RemoteEndPoint = new IPEndPoint(IPAddress.Any, 0);
+                    return buf;
+                }
+            }
+            return new UDPPacketBuffer(new IPEndPoint(IPAddress.Any, 0));
+        }
+
         public UDPPacketBuffer GetNewUDPBuffer(IPEndPoint remoteEndpoint)
         {
             lock (m_udpBuffersPoolLock)
@@ -337,7 +353,7 @@ namespace OpenMetaverse
             if (!IsRunningInbound)
                 return;
 
-            UDPPacketBuffer buf = GetNewUDPBuffer(new IPEndPoint(IPAddress.Any, 0)); // we need a fresh one here, for now at least
+            UDPPacketBuffer buf = GetNewUDPBuffer();
             try
             {
                 // kick off an async read

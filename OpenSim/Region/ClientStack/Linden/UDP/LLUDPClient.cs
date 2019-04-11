@@ -859,17 +859,17 @@ namespace OpenSim.Region.ClientStack.LindenUDP
             switch (category)
             {
                 case ThrottleOutPacketType.Land:
-                    return ThrottleOutPacketTypeFlags.Land; // Terrain data
+                    return ThrottleOutPacketTypeFlags.Land;
                 case ThrottleOutPacketType.Wind:
-                    return ThrottleOutPacketTypeFlags.Wind; // Wind data
+                    return ThrottleOutPacketTypeFlags.Wind;
                 case ThrottleOutPacketType.Cloud:
-                    return ThrottleOutPacketTypeFlags.Cloud; // Cloud data
+                    return ThrottleOutPacketTypeFlags.Cloud;
                 case ThrottleOutPacketType.Task:
-                    return ThrottleOutPacketTypeFlags.Task; // Object updates and everything not on the other categories
+                    return ThrottleOutPacketTypeFlags.Task;
                 case ThrottleOutPacketType.Texture:
-                    return ThrottleOutPacketTypeFlags.Texture; // Textures data (also impacts http texture and mesh by default)
+                    return ThrottleOutPacketTypeFlags.Texture;
                 case ThrottleOutPacketType.Asset:
-                    return ThrottleOutPacketTypeFlags.Asset; // Non-texture Assets data
+                    return ThrottleOutPacketTypeFlags.Asset;
                 default:
                     return 0;
             }
