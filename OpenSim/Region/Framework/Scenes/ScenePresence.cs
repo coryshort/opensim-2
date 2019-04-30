@@ -583,9 +583,9 @@ namespace OpenSim.Region.Framework.Scenes
         public string Firstname { get; private set; }
         public string Lastname { get; private set; }
 
-        public bool haveGroupInformation;
-        public bool gotCrossUpdate;
-        public byte crossingFlags;
+        public bool m_haveGroupInformation;
+        public bool m_gotCrossUpdate;
+        public byte m_crossingFlags;
 
         public string Grouptitle
         {
@@ -1296,7 +1296,7 @@ namespace OpenSim.Region.Framework.Scenes
                     {
                         part.AddSittingAvatar(this);
                         // if not actually on the target invalidate it
-                        if(gotCrossUpdate && (crossingFlags & 0x04) == 0)
+                        if(m_gotCrossUpdate && (m_crossingFlags & 0x04) == 0)
                                 part.SitTargetAvatar = UUID.Zero;
 
                         ParentID = part.LocalId;
@@ -1582,9 +1582,9 @@ namespace OpenSim.Region.Framework.Scenes
         public void MakeChildAgent(ulong newRegionHandle)
         {
             m_updateAgentReceivedAfterTransferEvent.Reset();
-            haveGroupInformation = false;
-            gotCrossUpdate = false;
-            crossingFlags = 0;
+            m_haveGroupInformation = false;
+            m_gotCrossUpdate = false;
+            m_crossingFlags = 0;
             m_scene.EventManager.OnRegionHeartbeatEnd -= RegionHeartbeatEnd;
 
             RegionHandle = newRegionHandle;
@@ -2117,7 +2117,7 @@ namespace OpenSim.Region.Framework.Scenes
 
                 //m_log.DebugFormat("[CompleteMovement] MakeRootAgent: {0}ms", Util.EnvironmentTickCountSubtract(ts));
 
-                if(!haveGroupInformation && !IsChildAgent && !IsNPC)
+                if(!m_haveGroupInformation && !IsChildAgent && !IsNPC)
                 {
                     IGroupsModule gm = m_scene.RequestModuleInterface<IGroupsModule>();
                     if (gm != null)
@@ -2177,7 +2177,7 @@ namespace OpenSim.Region.Framework.Scenes
 
                 if (!IsChildAgent)
                 {
-                    if( ParentPart != null && !IsNPC && (crossingFlags & 0x08) != 0)
+                    if( ParentPart != null && !IsNPC && (m_crossingFlags & 0x08) != 0)
                     {
                         ParentPart.ParentGroup.SendFullAnimUpdateToClient(ControllingClient);
                     }
@@ -2204,12 +2204,12 @@ namespace OpenSim.Region.Framework.Scenes
 
                 if(m_teleportFlags > 0)
                 {
-                    gotCrossUpdate = false; // sanity check
+                    m_gotCrossUpdate = false; // sanity check
                     if(Util.EnvironmentTickCountSubtract(delayctnr)< 500)
                         Thread.Sleep(500);  // let viewers catch us
                 }
 
-                if(!gotCrossUpdate)
+                if(!m_gotCrossUpdate)
                     RotateToLookAt(look);
 
                 // HG
@@ -2230,7 +2230,7 @@ namespace OpenSim.Region.Framework.Scenes
                     GodController.SyncViewerState();
                     
                     // start sending terrain patchs
-                    if (!gotCrossUpdate)
+                    if (!m_gotCrossUpdate)
                         Scene.SendLayerData(ControllingClient);
                 }
                 // send initial land overlay and parcel
@@ -2374,7 +2374,7 @@ namespace OpenSim.Region.Framework.Scenes
                     IFriendsModule friendsModule = m_scene.RequestModuleInterface<IFriendsModule>();
                     if (friendsModule != null)
                     {
-                        if(gotCrossUpdate)
+                        if(m_gotCrossUpdate)
                             friendsModule.IsNowRoot(this);
                         else
                             friendsModule.SendFriendsOnlineIfNeeded(ControllingClient);
@@ -2385,9 +2385,9 @@ namespace OpenSim.Region.Framework.Scenes
             }
             finally
             {
-                haveGroupInformation = false;
-                gotCrossUpdate = false;
-                crossingFlags = 0;
+                m_haveGroupInformation = false;
+                m_gotCrossUpdate = false;
+                m_crossingFlags = 0;
                 m_inTransit = false;
             }
  
@@ -4786,7 +4786,7 @@ namespace OpenSim.Region.Framework.Scenes
 
             if(isCrossUpdate)
             {
-                cAgent.CrossingFlags = crossingFlags;
+                cAgent.CrossingFlags = m_crossingFlags;
                 cAgent.CrossingFlags |= 1;
                 cAgent.CrossExtraFlags = 0;
                 if((LastCommands & ScriptControlled.CONTROL_LBUTTON) != 0)
@@ -4922,9 +4922,9 @@ namespace OpenSim.Region.Framework.Scenes
             if (cAgent.MotionState != 0)
                 Animator.currentControlState = (ScenePresenceAnimator.motionControlStates) cAgent.MotionState;
 
-            crossingFlags = cAgent.CrossingFlags;
-            gotCrossUpdate = (crossingFlags != 0);
-            if(gotCrossUpdate)
+            m_crossingFlags = cAgent.CrossingFlags;
+            m_gotCrossUpdate = (m_crossingFlags != 0);
+            if(m_gotCrossUpdate)
             {
                 LastCommands &= ~(ScriptControlled.CONTROL_LBUTTON | ScriptControlled.CONTROL_ML_LBUTTON);
                 if((cAgent.CrossExtraFlags & 1) != 0)
@@ -4934,11 +4934,11 @@ namespace OpenSim.Region.Framework.Scenes
                 MouseDown = (cAgent.CrossExtraFlags & 3) != 0;
             }
 
-            haveGroupInformation = false;
+            m_haveGroupInformation = false;
             // using this as protocol detection don't want to mess with the numbers for now
             if(cAgent.ActiveGroupTitle != null)
             {
-                haveGroupInformation = true;
+                m_haveGroupInformation = true;
                 COF = cAgent.agentCOF;
                 if(ControllingClient.IsGroupMember(cAgent.ActiveGroupID))
                 {
