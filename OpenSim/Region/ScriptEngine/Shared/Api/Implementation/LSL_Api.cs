@@ -2458,7 +2458,7 @@ namespace OpenSim.Region.ScriptEngine.Shared.Api
                 if (textureID == UUID.Zero)
                 {
                     if (!UUID.TryParse(texture, out textureID))
-                        return;
+                        dotexture = false;
                 }
             }
 
