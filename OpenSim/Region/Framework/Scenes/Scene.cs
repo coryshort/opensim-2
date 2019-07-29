@@ -1776,7 +1776,6 @@ namespace OpenSim.Region.Framework.Scenes
                             // Region ready should always be set
                             Ready = true;
 
-
                             IConfig restartConfig = m_config.Configs["RestartModule"];
                             if (restartConfig != null)
                             {
