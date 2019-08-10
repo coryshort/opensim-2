@@ -2085,8 +2085,7 @@ namespace OpenSim.Region.Framework.Scenes
             {
                 SceneObjectPart part = GetPart(localId);
 
-                if (((part.ScriptEvents & scriptEvents.anytouch) != 0) ||
-                    (part.PassTouches && (RootPart.ScriptEvents & scriptEvents.anytouch) != 0))
+                if (((part.ScriptEvents & scriptEvents.anytouch) != 0) || (RootPart.ScriptEvents & scriptEvents.anytouch) != 0)
                     lastTouchTime = Util.GetTimeStampMS();
                 OnGrabPart(part, offsetPos, remoteClient);
             }
@@ -3646,8 +3645,7 @@ namespace OpenSim.Region.Framework.Scenes
                     }
 
                     // a touch or pass may had become active ??
-                    if (((part.ScriptEvents & scriptEvents.anytouch) != 0) ||
-                        (part.PassTouches && (RootPart.ScriptEvents & scriptEvents.anytouch) != 0))
+                    if (((part.ScriptEvents & scriptEvents.anytouch) != 0) || (RootPart.ScriptEvents & scriptEvents.anytouch) != 0)
                     {
                         lastTouchTime = now;
                         return;
