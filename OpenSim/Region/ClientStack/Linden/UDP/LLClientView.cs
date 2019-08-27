@@ -10168,7 +10168,7 @@ namespace OpenSim.Region.ClientStack.LindenUDP
                         }
 
                         m_lastMapRegenTime = Double.MaxValue;
-                        mapModule.GenerateMaptile();
+                        ((Scene)Scene).RegenerateMaptileAndReregister(this, null);
                         SendAlertMessage("Terrain map generated");
                         m_lastMapRegenTime = now;
                     }
