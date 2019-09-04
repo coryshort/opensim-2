@@ -5522,5 +5522,28 @@ namespace OpenSim.Region.ScriptEngine.Shared.Api
                 return String.Empty;
             return detectedParams.Key.ToString();
         }
+
+        // returns PST or PDT wall clock
+        public LSL_Float osGetPSTWallclock()
+        {
+            m_host.AddScriptLPS(1);
+            if(PSTTimeZone == null)
+                return DateTime.Now.TimeOfDay.TotalSeconds;
+
+            DateTime time = TimeZoneInfo.ConvertTime(DateTime.UtcNow, PSTTimeZone);
+            return time.TimeOfDay.TotalSeconds;
+        }
+
+        public LSL_Rotation osSlerp(LSL_Rotation a, LSL_Rotation b, LSL_Float amount)
+        {
+            if(amount < 0)
+                amount= 0;
+            else if(amount > 1.0)
+                amount = 1.0;
+            a.Normalize();
+            b.Normalize();
+
+            return LSL_Rotation.Slerp(a, b, amount);
+        }
     }
 }
