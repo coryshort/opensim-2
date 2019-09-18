@@ -9299,6 +9299,7 @@ namespace OpenSim.Region.ClientStack.LindenUDP
                         // Really doesn't exist
                         m_log.WarnFormat("[llClient]: landmark asset {0} not found",lmid.ToString());
                         SendTeleportFailed("Could not find the landmark asset data");
+                        return true;
                     }
                 }
 
