@@ -161,8 +161,6 @@ namespace OpenSim.Region.ClientStack.Linden
                 m_features["MeshUploadEnabled"] = true;
                 m_features["MeshXferEnabled"] = true;
 
-                m_features["BakesOnMeshEnabled"] = true;
-
                 m_features["PhysicsMaterialsEnabled"] = true;
 
                 OSDMap typesMap = new OSDMap();
