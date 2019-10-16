@@ -346,6 +346,7 @@ namespace OpenSim.Region.ScriptEngine.Shared.Api
                     else
                     {
                         string[] ids;
+                        bool error = false;
                         if (!string.IsNullOrWhiteSpace(ownerPerm))
                         {
                             ids = ownerPerm.Split(new char[] {','});
@@ -392,15 +393,16 @@ namespace OpenSim.Region.ScriptEngine.Shared.Api
                                         }
                                         else
                                         {
-                                            m_log.WarnFormat("[OSSLENABLE]: error parsing line {0}", ownerPerm);
+                                            error = true;
                                         }
-
                                         break;
                                     }
                                 }
                             }
+                            if (error)
+                                m_log.WarnFormat("[OSSLENABLE]: error parsing line Allow_{0} = {1}", function, ownerPerm);
                         }
-
+                        error = false;
                         if (!string.IsNullOrWhiteSpace(creatorPerm))
                         {
                             ids = creatorPerm.Split(new char[] {','});
@@ -419,9 +421,11 @@ namespace OpenSim.Region.ScriptEngine.Shared.Api
                                 }
                                 else
                                 {
-                                    m_log.WarnFormat("[OSSLENABLE]: error parsing line {0}", creatorPerm);
+                                    error = true;
                                 }
                             }
+                            if (error)
+                                m_log.WarnFormat("[OSSLENABLE]: error parsing line Creators_{0} = {1}", function, creatorPerm);
                         }
                         // both empty fallback as disabled
                     }
