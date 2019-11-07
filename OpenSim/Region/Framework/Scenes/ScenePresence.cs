@@ -3134,7 +3134,7 @@ namespace OpenSim.Region.Framework.Scenes
         { 
             m_delayedStop = -1;
 
-            if (SitGround)
+            if (SitGround || IsSatOnObject)
                 StandUp();
 
 //            m_log.DebugFormat(
