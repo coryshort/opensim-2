@@ -406,7 +406,7 @@ namespace OpenSim.Region.Framework.Scenes
         private readonly Timer m_restartTimer = new Timer(15000); // Wait before firing
         private volatile bool m_backingup;
         private Dictionary<UUID, ReturnInfo> m_returns = new Dictionary<UUID, ReturnInfo>();
-        private Dictionary<UUID, int> m_groupsWithTargets = new Dictionary<UUID, int>();
+        private HashSet<UUID> m_groupsWithTargets = new HashSet<UUID>();
 
         private string m_defaultScriptEngine;
 
@@ -833,7 +833,8 @@ namespace OpenSim.Region.Framework.Scenes
 
             Random random = new Random();
 
-            m_lastAllocatedLocalId = (uint)(random.NextDouble() * (double)(uint.MaxValue / 2)) + (uint)(uint.MaxValue / 4);
+            m_lastAllocatedLocalId = (int)(random.NextDouble() * (uint.MaxValue / 4));
+            m_lastAllocatedIntId = (int)(random.NextDouble() * (int.MaxValue / 4));
             m_authenticateHandler = authen;
             m_sceneGridService = new SceneCommunicationService();
             m_SimulationDataService = simDataService;
@@ -1629,7 +1630,7 @@ namespace OpenSim.Region.Framework.Scenes
 
                 // m_log.DebugFormat("[SCENE]: Processing frame {0} in {1}", Frame, RegionInfo.RegionName);
 
-                agentMS = tempOnRezMS = eventMS = backupMS = terrainMS = landMS = 0f;
+                otherMS = agentMS = tempOnRezMS = eventMS = backupMS = terrainMS = landMS = 0f;
 
                 try
                 {
@@ -1711,6 +1712,10 @@ namespace OpenSim.Region.Framework.Scenes
                     // Objects queue their updates onto all scene presences
                     if (Frame % m_update_objects == 0)
                         m_sceneGraph.UpdateObjectGroups();
+
+                    tmpMS2 = Util.GetTimeStampMS();
+                    otherMS = (float)(tmpMS2 - tmpMS);
+                    tmpMS = tmpMS2;
 
                     // Run through all ScenePresences looking for updates
                     // Presence updates and queued object updates for each presence are sent to clients
@@ -1827,7 +1832,7 @@ namespace OpenSim.Region.Framework.Scenes
                 m_firstHeartbeat = false;
                 Watchdog.UpdateThread();
 
-                otherMS = tempOnRezMS + eventMS + backupMS + terrainMS + landMS;
+                otherMS += tempOnRezMS + eventMS + backupMS + terrainMS + landMS;
 
                 tmpMS = Util.GetTimeStampMS();
 
@@ -1911,7 +1916,7 @@ namespace OpenSim.Region.Framework.Scenes
         public void AddGroupTarget(SceneObjectGroup grp)
         {
             lock (m_groupsWithTargets)
-                m_groupsWithTargets[grp.UUID] = 0;
+                m_groupsWithTargets.Add(grp.UUID);
         }
 
         public void RemoveGroupTarget(SceneObjectGroup grp)
@@ -1927,13 +1932,14 @@ namespace OpenSim.Region.Framework.Scenes
             lock (m_groupsWithTargets)
             {
                 if (m_groupsWithTargets.Count != 0)
-                    objs = new List<UUID>(m_groupsWithTargets.Keys);
+                    objs = new List<UUID>(m_groupsWithTargets);
             }
 
             if (objs != null)
             {
-                foreach (UUID entry in objs)
+                for(int i = 0; i< objs.Count; ++i)
                 {
+                    UUID entry = objs[i];
                     SceneObjectGroup grp = GetSceneObjectGroup(entry);
                     if (grp == null)
                         m_groupsWithTargets.Remove(entry);
