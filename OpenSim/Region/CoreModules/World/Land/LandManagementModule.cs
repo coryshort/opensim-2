@@ -528,7 +528,7 @@ namespace OpenSim.Region.CoreModules.World.Land
             if (avatar.IsChildAgent)
                 return;
 
-            if ( m_allowedForcefulBans && m_showBansLines)
+            if ( m_allowedForcefulBans && m_showBansLines && m_scene.RegionInfo.EstateSettings.TaxFree)
                 SendOutNearestBanLine(avatar.ControllingClient);
         }
 
@@ -578,8 +578,11 @@ namespace OpenSim.Region.CoreModules.World.Land
             if(ldata.PassHours == 0)
                 return;
 
+            if (!m_scene.RegionInfo.EstateSettings.TaxFree)
+                return;
+
             // don't allow passes on group owned until we can give money to groups
-            if(ldata.IsGroupOwned)
+            if (ldata.IsGroupOwned)
             {
                 remote_client.SendAgentAlertMessage("pass to group owned parcel not suported", false);
                 return;
@@ -689,6 +692,9 @@ namespace OpenSim.Region.CoreModules.World.Land
         {
             if ((flags & 0x03) == 0)
                 return; // we only have access and ban
+
+            if(!m_scene.RegionInfo.EstateSettings.TaxFree)
+                return;
 
             ILandObject land;
             lock (m_landList)
