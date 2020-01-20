@@ -3423,7 +3423,7 @@ namespace OpenSim.Region.Framework.Scenes
                 }
 
                 ControllingClient.SendSitResponse(
-                    part.ParentGroup.UUID, offset, sitOrientation, false, cameraAtOffset, cameraEyeOffset, forceMouselook);
+                    part.ParentGroup.UUID, offset, sitOrientation, true, cameraAtOffset, cameraEyeOffset, forceMouselook);
 
                 m_requestedSitTargetUUID = part.UUID;
 
@@ -3431,8 +3431,8 @@ namespace OpenSim.Region.Framework.Scenes
 
                 // Moved here to avoid a race with default sit anim
                 // The script event needs to be raised after the default sit anim is set.
-                part.ParentGroup.TriggerScriptChangedEvent(Changed.LINK);
-                m_scene.EventManager.TriggerParcelPrimCountTainted(); // update select/ sat on
+                //part.ParentGroup.TriggerScriptChangedEvent(Changed.LINK);
+                //m_scene.EventManager.TriggerParcelPrimCountTainted(); // update select/ sat on
             }
         }
 
@@ -3571,7 +3571,7 @@ namespace OpenSim.Region.Framework.Scenes
             m_pos = offset;
 
             ControllingClient.SendSitResponse(
-                part.ParentGroup.UUID, offset, Orientation, false, cameraAtOffset, cameraEyeOffset, forceMouselook);
+                part.ParentGroup.UUID, offset, Orientation, true, cameraAtOffset, cameraEyeOffset, forceMouselook);
 
             SendAvatarDataToAllAgents();
 
@@ -3590,7 +3590,10 @@ namespace OpenSim.Region.Framework.Scenes
             if (IsChildAgent)
                 return;
 
-             SceneObjectPart part = m_scene.GetSceneObjectPart(m_requestedSitTargetID);
+            if(SitGround || IsSatOnObject)
+                return;
+
+            SceneObjectPart part = m_scene.GetSceneObjectPart(m_requestedSitTargetID);
 
             if (part != null)
             {
@@ -3734,7 +3737,9 @@ namespace OpenSim.Region.Framework.Scenes
                 }
 //                Animator.TrySetMovementAnimation(sitAnimation);
                 Animator.SetMovementAnimations("SIT");
-                TriggerScenePresenceUpdated();
+//                TriggerScenePresenceUpdated();
+                part.ParentGroup.TriggerScriptChangedEvent(Changed.LINK);
+                m_scene.EventManager.TriggerParcelPrimCountTainted(); // update select/ sat on
             }
         }
 
