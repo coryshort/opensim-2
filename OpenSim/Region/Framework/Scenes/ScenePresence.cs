@@ -3442,9 +3442,10 @@ namespace OpenSim.Region.Framework.Scenes
                 }
             }
 
+            sitOrientation = part.ParentGroup.RootPart.RotationOffset * sitOrientation;
             ControllingClient.SendSitResponse(
-                part.ParentGroup.UUID, offset, sitOrientation * part.ParentGroup.RootPart.RotationOffset,
-                    true, cameraAtOffset, cameraEyeOffset, forceMouselook);
+                part.ParentGroup.UUID, offset, sitOrientation,
+                true, cameraAtOffset, cameraEyeOffset, forceMouselook);
 
             m_requestedSitTargetUUID = part.UUID;
 
@@ -3589,7 +3590,7 @@ namespace OpenSim.Region.Framework.Scenes
             m_bodyRot = Orientation;
             m_pos = offset;
 
-            Orientation *= part.ParentGroup.RootPart.RotationOffset;
+            Orientation = part.ParentGroup.RootPart.RotationOffset * Orientation;
 
             ControllingClient.SendSitResponse(
                 part.ParentGroup.UUID, offset, Orientation, true, cameraAtOffset, cameraEyeOffset, part.GetForceMouselook());
