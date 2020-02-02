@@ -1254,9 +1254,7 @@
     ; Include-Architecture = "config-include/StandaloneHypergrid.ini"
     ; Include-Architecture = "config-include/Grid.ini"
     ; Include-Architecture = "config-include/GridHypergrid.ini"
-    ; Include-Architecture = "config-include/SimianGrid.ini"
-    ; Include-Architecture = "config-include/HyperSimianGrid.ini"
 
 [ServerReleaseNotes]
-	;; Comment or set to "" to disable
+    ;; Comment or set to "" to disable
     ServerReleaseNotesURL = "https://github.com/lickx/opensim/wiki"
