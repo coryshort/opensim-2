@@ -55,5 +55,10 @@ goto :done
     @echo Found msbuild at %ValueValue%
     @echo Creating compile.bat
     @echo %ValueValue% opensim.sln > compile.bat
-
+rem To compile in release mode comment line (add rem to start) above and uncomment next (remove rem)
+rem @echo %ValueValue% /P:Config=Release opensim.sln > compile.bat
 :done
+if exist "bin\addin-db-002" (
+	del /F/Q/S bin\addin-db-002 > NUL
+	rmdir /Q/S bin\addin-db-002
+	)
