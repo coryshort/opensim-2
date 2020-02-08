@@ -18259,14 +18259,7 @@ namespace OpenSim.Region.ScriptEngine.Shared.Api
 
                 Notecard nc = new Notecard();
                 nc.lastRef = DateTime.Now;
-                try
-                {
-                    nc.text = SLUtil.ParseNotecardToArray(text);
-                }
-                catch(SLUtil.NotANotecardFormatException)
-                {
-                    nc.text = new string[0];
-                }
+                nc.text = SLUtil.ParseNotecardToArray(text);
                 m_Notecards[assetID] = nc;
             }
         }
