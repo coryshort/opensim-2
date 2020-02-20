@@ -5196,7 +5196,7 @@ Label_GroupsDone:
         /// <param name="action"></param>
         public void ForEachRootScenePresence(Action<ScenePresence> action)
         {
-            m_sceneGraph.ForEachAvatar(action);
+            m_sceneGraph.ForEachRootScenePresence(action);
         }
 
         /// <summary>
