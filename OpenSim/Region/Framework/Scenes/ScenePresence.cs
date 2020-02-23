@@ -2260,6 +2260,7 @@ namespace OpenSim.Region.Framework.Scenes
                 if(isHGTP)
                 {
 //                    ControllingClient.SendNameReply(m_uuid, Firstname, Lastname);
+                    RestartAttachmentScripts();
                     m_log.DebugFormat("[CompleteMovement] HG");
                 }
 
