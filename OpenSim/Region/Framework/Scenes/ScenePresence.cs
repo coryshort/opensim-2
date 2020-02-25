@@ -2355,12 +2355,10 @@ namespace OpenSim.Region.Framework.Scenes
                     {
                         if (m_attachments.Count > 0)
                         {
-//                            m_log.DebugFormat(
-//                                "[SCENE PRESENCE]: Restarting scripts in attachments for {0} in {1}", Name, Scene.Name);
-
                             foreach (SceneObjectGroup sog in m_attachments)
                             {
                                 sog.RootPart.ParentGroup.CreateScriptInstances(0, false, m_scene.DefaultScriptEngine, GetStateSource());
+                                sog.aggregateScriptEvents();
                                 sog.ResumeScripts();
                             }
 
