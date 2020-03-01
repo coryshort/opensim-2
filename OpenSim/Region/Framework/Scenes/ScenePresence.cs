@@ -2357,24 +2357,24 @@ namespace OpenSim.Region.Framework.Scenes
                         {
                             foreach (SceneObjectGroup sog in m_attachments)
                             {
+                                sog.ScheduleGroupForFullUpdate();
                                 sog.RootPart.ParentGroup.CreateScriptInstances(0, false, m_scene.DefaultScriptEngine, GetStateSource());
-                                sog.aggregateScriptEvents();
                                 sog.ResumeScripts();
                             }
+                        }
 
-                            foreach (ScenePresence p in allpresences)
+                        foreach (ScenePresence p in allpresences)
+                        {
+                            if (p == this)
                             {
-                                if (p == this)
-                                {
-                                    SendAttachmentsToAgentNF(this);
-                                    continue;
-                                }
-
-                                if (ParcelHideThisAvatar && currentParcelUUID != p.currentParcelUUID && !p.IsViewerUIGod)
-                                    continue;
-
-                                SendAttachmentsToAgentNF(p);
+                                SendAttachmentsToAgentNF(this);
+                                continue;
                             }
+
+                            if (ParcelHideThisAvatar && currentParcelUUID != p.currentParcelUUID && !p.IsViewerUIGod)
+                                continue;
+
+                            SendAttachmentsToAgentNF(p);
                         }
                     }
 
