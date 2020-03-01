@@ -793,6 +793,7 @@ namespace OpenSim.Tests.Common
                                                        List<InventoryItemBase> items,
                                                        List<InventoryFolderBase> folders,
                                                        int version,
+                                                       int descendents,
                                                        bool fetchFolders,
                                                        bool fetchItems)
         {
