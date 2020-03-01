@@ -712,7 +712,7 @@ namespace OpenSim.Region.OptionalModules.Agent.InternetRelayClientView.Server
         public event AvatarPickerRequest OnAvatarPickerRequest;
         public event Action<IClientAPI> OnRequestAvatarsData;
         public event AddNewPrim OnAddPrim;
-        public event FetchInventory OnAgentDataUpdateRequest;
+        public event AgentDataUpdate OnAgentDataUpdateRequest;
         public event TeleportLocationRequest OnSetStartLocationRequest;
         public event RequestGodlikePowers OnRequestGodlikePowers;
         public event GodKickUser OnGodKickUser;
@@ -1127,7 +1127,7 @@ namespace OpenSim.Region.OptionalModules.Agent.InternetRelayClientView.Server
 
         }
 
-        public void SendInventoryItemDetails(UUID ownerID, InventoryItemBase item)
+        public void SendInventoryItemDetails(InventoryItemBase[] items)
         {
 
         }
