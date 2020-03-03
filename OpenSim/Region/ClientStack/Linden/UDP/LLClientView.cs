@@ -4265,6 +4265,17 @@ namespace OpenSim.Region.ClientStack.LindenUDP
                             continue;
                         }
                     }
+
+                    if (updateFlags.HasFlag(PrimUpdateFlags.Animations))
+                    {
+                        if (m_SupportObjectAnimations && part.Animations != null)
+                        {
+                            if (ObjectAnimationUpdates == null)
+                                ObjectAnimationUpdates = new List<SceneObjectPart>();
+                            ObjectAnimationUpdates.Add(part);
+                            maxUpdatesBytes -= 20 * part.Animations.Count + 24;
+                        }
+                    }
                 }
                 else if (update.Entity is ScenePresence)
                 {
