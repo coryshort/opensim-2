@@ -5780,5 +5780,10 @@ namespace OpenSim.Region.ScriptEngine.Shared.Api
                 return Vector3.Zero;
             return target.StandOffset;
         }
+
+        public LSL_Integer osClearObjectAnimations()
+        {
+            return m_host.ClearObjectAnimations();
+        }
     }
 }
