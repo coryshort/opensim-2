@@ -581,11 +581,7 @@ namespace OpenSim.Tests.Common
         {
         }
 
-        public virtual void SendStartPingCheck(byte seq)
-        {
-        }
-
-        public virtual void SendAvatarPickerReply(AvatarPickerReplyAgentDataArgs AgentData, List<AvatarPickerReplyDataArgs> Data)
+        public virtual void SendAvatarPickerReply(UUID QueryID, List<UserData> users)
         {
         }
 
