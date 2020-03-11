@@ -675,6 +675,10 @@ namespace OpenSim.Region.OptionalModules.World.NPC
         {
         }
 
+        public virtual void SendStartPingCheck(byte seq)
+        {
+        }
+
         public virtual void SendAvatarPickerReply(AvatarPickerReplyAgentDataArgs AgentData, List<AvatarPickerReplyDataArgs> Data)
         {
         }
