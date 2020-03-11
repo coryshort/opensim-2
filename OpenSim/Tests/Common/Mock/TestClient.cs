@@ -581,7 +581,7 @@ namespace OpenSim.Tests.Common
         {
         }
 
-        public virtual void SendAvatarPickerReply(UUID QueryID, List<UserData> users)
+        public virtual void SendAvatarPickerReply(AvatarPickerReplyAgentDataArgs AgentData, List<AvatarPickerReplyDataArgs> Data)
         {
         }
 
