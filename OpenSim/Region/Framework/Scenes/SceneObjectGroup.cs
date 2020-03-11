@@ -132,6 +132,8 @@ namespace OpenSim.Region.Framework.Scenes
         private long m_minPersistTime = 0;
 //        private Random m_rand;
 
+        public int PseudoCRC;
+
         /// <summary>
         /// This indicates whether the object has changed such that it needs to be repersisted to permenant storage
         /// (the database).
